@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Search, ChevronLeft, ChevronRight, Loader2, ShoppingCart } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, Loader2, ShoppingCart, X } from 'lucide-react';
 
 interface SparePart {
   id: number;
@@ -25,20 +25,30 @@ export default function SparePartsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const [activeSearchTerm, setActiveSearchTerm] = useState('');
   const [exchangeRate, setExchangeRate] = useState<ExchangeRate | null>(null);
   
   const itemsPerPage = 12;
 
-  // Debounce search term
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-      setCurrentPage(1); // Reset to first page when searching
-    }, 500);
+  // Handle search
+  const handleSearch = () => {
+    setActiveSearchTerm(searchTerm);
+    setCurrentPage(1); // Reset to first page when searching
+  };
 
-    return () => clearTimeout(timer);
-  }, [searchTerm]);
+  // Handle clear search
+  const handleClearSearch = () => {
+    setSearchTerm('');
+    setActiveSearchTerm('');
+    setCurrentPage(1);
+  };
+
+  // Handle Enter key press
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   // Fetch exchange rate
   useEffect(() => {
@@ -71,8 +81,8 @@ export default function SparePartsPage() {
         
         // Build API URL with search parameter
         let apiUrl = `/api/spare-parts?limit=${itemsPerPage}&offset=${offset}`;
-        if (debouncedSearchTerm.trim()) {
-          apiUrl += `&search=${encodeURIComponent(debouncedSearchTerm.trim())}`;
+        if (activeSearchTerm.trim()) {
+          apiUrl += `&search=${encodeURIComponent(activeSearchTerm.trim())}`;
         }
         
         // Use our API route to avoid CORS issues
@@ -108,7 +118,7 @@ export default function SparePartsPage() {
     };
 
     fetchSpareParts();
-  }, [currentPage, debouncedSearchTerm]);
+  }, [currentPage, activeSearchTerm]);
 
   const convertToUAH = (usdPrice: string) => {
     if (!exchangeRate) return 'Завантаження...';
@@ -155,22 +165,61 @@ export default function SparePartsPage() {
 
         {/* Search */}
         <motion.div 
-          className="max-w-md mx-auto mb-8"
+          className="max-w-lg mx-auto mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-            <input
-              type="text"
-              placeholder="Пошук за артикулом або назвою..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-            />
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <input
+                type="text"
+                placeholder="Пошук за артикулом або назвою..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyPress={handleKeyPress}
+                className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+              />
+              {searchTerm && (
+                <button
+                  onClick={handleClearSearch}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              )}
+            </div>
+            <button
+              onClick={handleSearch}
+              className="px-6 py-3 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity duration-300 flex items-center gap-2"
+              style={{backgroundColor: '#008E4E'}}
+            >
+              <Search className="h-5 w-5" />
+              Пошук
+            </button>
           </div>
         </motion.div>
+
+        {/* Active Search Info */}
+        {activeSearchTerm && (
+          <motion.div 
+            className="text-center mb-4 p-3 bg-primary/10 rounded-lg"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <p className="text-sm text-gray-700">
+              Результати пошуку для: <span className="font-semibold text-primary">"{activeSearchTerm}"</span>
+              <button
+                onClick={handleClearSearch}
+                className="ml-2 text-gray-500 hover:text-gray-700"
+              >
+                <X className="h-4 w-4 inline" />
+              </button>
+            </p>
+          </motion.div>
+        )}
 
         {/* Exchange Rate Info */}
         {exchangeRate && (
@@ -301,7 +350,7 @@ export default function SparePartsPage() {
         {spareParts.length === 0 && !loading && (
           <div className="text-center py-12">
             <p className="text-gray-600">
-              {searchTerm ? `Запчастини з артикулом "${searchTerm}" не знайдено` : 'Запчастини не знайдено'}
+              {activeSearchTerm ? `Запчастини з артикулом "${activeSearchTerm}" не знайдено` : 'Запчастини не знайдено'}
             </p>
           </div>
         )}
