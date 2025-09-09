@@ -215,7 +215,7 @@ export default function SparePartsPage() {
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <p className="text-sm text-gray-700">
-              Результати пошуку для: <span className="font-semibold text-primary">"{activeSearchTerm}"</span>
+              Результати пошуку для: <span className="font-semibold text-primary">&quot;{activeSearchTerm}&quot;</span>
               <button
                 onClick={handleClearSearch}
                 className="ml-2 text-gray-500 hover:text-gray-700"
@@ -236,7 +236,7 @@ export default function SparePartsPage() {
           >
             <p className="text-sm text-gray-700">
               {activeSearchTerm ? (
-                <>Знайдено <span className="font-semibold text-blue-600">{totalCount.toLocaleString('uk-UA')}</span> запчастин для "<span className="font-semibold text-primary">{activeSearchTerm}</span>"</>
+                <>Знайдено <span className="font-semibold text-blue-600">{totalCount.toLocaleString('uk-UA')}</span> запчастин для &quot;<span className="font-semibold text-primary">{activeSearchTerm}</span>&quot;</>
               ) : (
                 <>Всього запчастин в базі: <span className="font-semibold text-blue-600">{totalCount.toLocaleString('uk-UA')}</span></>
               )}
