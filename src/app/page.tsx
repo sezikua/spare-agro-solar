@@ -4,16 +4,22 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Tractor, MapPin, Clock, Users } from 'lucide-react';
+import VideoBackground from '@/components/VideoBackground';
 
 export default function Home() {
+  const videos = ['/video/01.mp4', '/video/02.mp4'];
+
   return (
     <div className="bg-white">
-      {/* Hero Section */}
-      <section className="relative text-white py-20" style={{backgroundColor: '#008E4E'}}>
+      {/* Hero Section with Video Background */}
+      <VideoBackground 
+        videos={videos}
+        className="min-h-screen flex items-center"
+      >
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <motion.h1 
-              className="text-4xl md:text-6xl font-bold mb-6"
+              className="text-4xl md:text-6xl font-bold mb-6 text-white"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
@@ -42,7 +48,7 @@ export default function Home() {
             </motion.div>
           </div>
         </div>
-      </section>
+      </VideoBackground>
 
       {/* About Section */}
       <section className="py-16 bg-gray-50">
