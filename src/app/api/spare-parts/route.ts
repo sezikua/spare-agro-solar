@@ -7,6 +7,30 @@ export async function GET(request: NextRequest) {
     const offset = searchParams.get('offset') || '0';
     const search = searchParams.get('search') || '';
     
+    // Build filter for count query
+    let countFilter = '';
+    if (search.trim()) {
+      countFilter = `&filter[article][_contains]=${encodeURIComponent(search.trim())}`;
+    }
+    
+    // Get total count first
+    const countUrl = `http://173.212.215.18:8055/items/spare_parts?limit=0&meta=total_count${countFilter}`;
+    const countResponse = await fetch(countUrl, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!countResponse.ok) {
+      throw new Error(`Directus count API error: ${countResponse.status}`);
+    }
+
+    const countData = await countResponse.json();
+    const totalCount = countData.meta?.total_count || 0;
+    
+    // Get actual data
     let directusUrl = `http://173.212.215.18:8055/items/spare_parts?limit=${limit}&offset=${offset}`;
     
     // Add search filter if search term is provided
@@ -29,7 +53,14 @@ export async function GET(request: NextRequest) {
 
     const data = await response.json();
     
-    return NextResponse.json(data, {
+    // Return data with total count
+    return NextResponse.json({
+      ...data,
+      meta: {
+        ...data.meta,
+        total_count: totalCount
+      }
+    }, {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',

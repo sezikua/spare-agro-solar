@@ -24,6 +24,7 @@ export default function SparePartsPage() {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeSearchTerm, setActiveSearchTerm] = useState('');
   const [exchangeRate, setExchangeRate] = useState<ExchangeRate | null>(null);
@@ -103,10 +104,14 @@ export default function SparePartsPage() {
         
         if (data && data.data) {
           setSpareParts(data.data);
-          // Calculate total pages based on actual data
-          setTotalPages(Math.ceil(10000 / itemsPerPage)); // Assuming 10k total items
+          // Get total count from API response
+          const total = data.meta?.total_count || 0;
+          setTotalCount(total);
+          setTotalPages(Math.ceil(total / itemsPerPage));
         } else {
           setSpareParts([]);
+          setTotalCount(0);
+          setTotalPages(1);
         }
       } catch (error) {
         console.error('Error fetching spare parts:', error);
@@ -221,6 +226,24 @@ export default function SparePartsPage() {
           </motion.div>
         )}
 
+        {/* Total Count Info */}
+        {totalCount > 0 && (
+          <motion.div 
+            className="text-center mb-4 p-3 bg-blue-50 rounded-lg"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <p className="text-sm text-gray-700">
+              {activeSearchTerm ? (
+                <>Знайдено <span className="font-semibold text-blue-600">{totalCount.toLocaleString('uk-UA')}</span> запчастин для "<span className="font-semibold text-primary">{activeSearchTerm}</span>"</>
+              ) : (
+                <>Всього запчастин в базі: <span className="font-semibold text-blue-600">{totalCount.toLocaleString('uk-UA')}</span></>
+              )}
+            </p>
+          </motion.div>
+        )}
+
         {/* Exchange Rate Info */}
         {exchangeRate && (
           <motion.div 
@@ -306,43 +329,80 @@ export default function SparePartsPage() {
         {/* Pagination */}
         {totalPages > 1 && (
           <motion.div 
-            className="flex justify-center items-center space-x-2"
+            className="flex flex-col items-center space-y-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
+            {/* Page Info */}
+            <div className="text-sm text-gray-600">
+              Сторінка {currentPage} з {totalPages} 
+              {totalCount > 0 && (
+                <span className="ml-2">
+                  ({((currentPage - 1) * itemsPerPage + 1).toLocaleString('uk-UA')} - {Math.min(currentPage * itemsPerPage, totalCount).toLocaleString('uk-UA')} з {totalCount.toLocaleString('uk-UA')})
+                </span>
+              )}
+            </div>
             
-            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-              const page = i + 1;
-              return (
-                <button
-                  key={page}
-                  onClick={() => handlePageChange(page)}
-                  className={`px-4 py-2 rounded-lg ${
-                    currentPage === page
-                      ? 'bg-primary text-white'
-                      : 'border border-gray-300 hover:bg-gray-50'
-                  }`}
-                >
-                  {page}
-                </button>
-              );
-            })}
-            
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
+            {/* Pagination Controls */}
+            <div className="flex justify-center items-center space-x-2">
+              <button
+                onClick={() => handlePageChange(1)}
+                disabled={currentPage === 1}
+                className="px-3 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+              >
+                Перша
+              </button>
+              
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              
+              {/* Show 5 pages around current page */}
+              {(() => {
+                const pages = [];
+                const startPage = Math.max(1, currentPage - 2);
+                const endPage = Math.min(totalPages, startPage + 4);
+                const actualStartPage = Math.max(1, endPage - 4);
+                
+                for (let i = actualStartPage; i <= endPage; i++) {
+                  pages.push(
+                    <button
+                      key={i}
+                      onClick={() => handlePageChange(i)}
+                      className={`px-4 py-2 rounded-lg ${
+                        currentPage === i
+                          ? 'bg-primary text-white'
+                          : 'border border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      {i}
+                    </button>
+                  );
+                }
+                return pages;
+              })()}
+              
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+              
+              <button
+                onClick={() => handlePageChange(totalPages)}
+                disabled={currentPage === totalPages}
+                className="px-3 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+              >
+                Остання
+              </button>
+            </div>
           </motion.div>
         )}
 
