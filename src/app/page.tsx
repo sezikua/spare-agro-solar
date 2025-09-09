@@ -14,7 +14,7 @@ export default function Home() {
       {/* Hero Section with Video Background */}
       <VideoBackground 
         videos={videos}
-        className="min-h-screen flex items-center"
+        className="flex items-center"
       >
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
