@@ -1,103 +1,303 @@
-import Image from "next/image";
+'use client';
+
+import Link from 'next/link';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { Tractor, MapPin, Clock, Users } from 'lucide-react';
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="bg-white">
+      {/* Hero Section */}
+      <section className="relative text-white py-20" style={{backgroundColor: '#008E4E'}}>
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.h1 
+              className="text-4xl md:text-6xl font-bold mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              Agro Solar
+            </motion.h1>
+            <motion.p 
+              className="text-xl md:text-2xl mb-8 text-white/90"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              Надійний партнер у світі сільськогосподарської техніки
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              <Link 
+                href="/spare-parts"
+                className="inline-block bg-secondary text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-secondary/90 transition-colors duration-300"
+              >
+                Переглянути запчастини
+              </Link>
+            </motion.div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+      </section>
+
+      {/* About Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.h2 
+              className="text-3xl md:text-4xl font-bold text-gray-900 mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              Про нас
+            </motion.h2>
+            <motion.p 
+              className="text-lg text-gray-700 mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              Ми – офіційний дилер відомих брендів сільгосптехніки, таких як John Deere, 
+              Väderstad, Geringhoff, Hagie, Kramer, Mazzotti, Monosem, Sulky та ін.
+            </motion.p>
+            <motion.p 
+              className="text-lg text-gray-700"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
+            >
+              Agro Solar було засновано в 2022 році, і вже отримало довіру понад 2000 
+              сільгосппідприємств по всій Україні.
+            </motion.p>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <motion.h2 
+            className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            Наші послуги
+          </motion.h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Spare Parts */}
+            <motion.div 
+              className="text-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+              style={{backgroundColor: '#008E4E'}}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <div className="flex items-center mb-4">
+            <Image
+                  src="/images/icon.svg"
+                  alt="Icon"
+                  width={32}
+                  height={32}
+                  className="mr-3"
+                />
+                <h3 className="text-xl font-semibold text-white">Запасні частини</h3>
+              </div>
+              <p className="text-white/90 mb-4">
+                Оригінальні запчастини для сільгосптехніки від світових брендів. 
+                Швидкі доставки з Європи та США.
+              </p>
+              <Link 
+                href="/spare-parts"
+                className="text-secondary hover:text-secondary/80 font-medium"
+              >
+                Детальніше →
+              </Link>
+            </motion.div>
+
+            {/* Service Support */}
+            <motion.div 
+              className="text-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+              style={{backgroundColor: '#008E4E'}}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              <div className="flex items-center mb-4">
           <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+                  src="/images/icon.svg"
+                  alt="Icon"
+                  width={32}
+                  height={32}
+                  className="mr-3"
+                />
+                <h3 className="text-xl font-semibold text-white">Сервісна підтримка</h3>
+              </div>
+              <p className="text-white/90 mb-4">
+                Професійна сервісна підтримка з потужною інфраструктурою 
+                у Києві, Ніжині та Сумах.
+              </p>
+              <Link 
+                href="/contacts"
+                className="text-secondary hover:text-secondary/80 font-medium"
+              >
+                Контакти →
+              </Link>
+            </motion.div>
+
+            {/* Precision Agriculture */}
+            <motion.div 
+              className="text-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+              style={{backgroundColor: '#008E4E'}}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
+            >
+              <div className="flex items-center mb-4">
           <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+                  src="/images/icon.svg"
+                  alt="Icon"
+                  width={32}
+                  height={32}
+                  className="mr-3"
+                />
+                <h3 className="text-xl font-semibold text-white">Точне землеробство</h3>
+              </div>
+              <p className="text-white/90 mb-4">
+                Передові технології GPS-навігації, датчики та автоматичне 
+                управління для оптимізації виробництва.
+              </p>
+              <Link 
+                href="/about"
+                className="text-secondary hover:text-secondary/80 font-medium"
+              >
+                Детальніше →
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <motion.div 
+              className="text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <div className="bg-primary text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <Tractor className="h-8 w-8" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Широкий вибір техніки</h3>
+              <p className="text-gray-700 text-sm">
+                Трактори, комбайни, сівалки та обприскувачі від світових лідерів
+              </p>
+            </motion.div>
+
+            <motion.div 
+              className="text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+            >
+              <div className="bg-primary text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <Clock className="h-8 w-8" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Оперативне постачання</h3>
+              <p className="text-gray-700 text-sm">
+                Системи точного землеробства та надійний сервіс
+              </p>
+            </motion.div>
+
+            <motion.div 
+              className="text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              <div className="bg-primary text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <MapPin className="h-8 w-8" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Регіональне покриття</h3>
+              <p className="text-gray-700 text-sm">
+                Філіали у Київській, Сумській та Чернігівській областях
+              </p>
+            </motion.div>
+
+            <motion.div 
+              className="text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              <div className="bg-primary text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <Users className="h-8 w-8" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">2000+ клієнтів</h3>
+              <p className="text-gray-700 text-sm">
+                Довіра сільгосппідприємств по всій Україні
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 text-white" style={{backgroundColor: '#008E4E'}}>
+        <div className="container mx-auto px-4 text-center">
+          <motion.h2 
+            className="text-3xl md:text-4xl font-bold mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            Готові розпочати співпрацю?
+          </motion.h2>
+          <motion.p 
+            className="text-xl mb-8 text-white/90"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            Зв&apos;яжіться з нами для отримання професійної консультації
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            <Link 
+              href="/contacts"
+              className="inline-block bg-secondary text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-secondary/90 transition-colors duration-300"
+            >
+              Зв&apos;язатися з нами
+            </Link>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 }
